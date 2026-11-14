@@ -2,6 +2,8 @@ package com.codebleach.auth;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.title.Title;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.filter.AbstractFilter;
@@ -58,7 +60,7 @@ public class CodeBleachAuth extends JavaPlugin implements Listener {
     }
 
     private boolean locked(Player p) { return !authed.contains(p.getUniqueId()); }
-    private static void say(Player p, String s) { p.sendMessage(Component.text(s)); }
+    private static void say(Player p, String s) { p.sendActionBar(Component.text(s, NamedTextColor.GRAY)); }
     private static String ip(Player p) { return p.getAddress() == null ? "" : p.getAddress().getAddress().getHostAddress(); }
     private static String esc(String s) { return s.replace("\\", "\\\\").replace("\"", "\\\""); }
     private String base() { String s = getConfig().getString("site-url", ""); return s.endsWith("/") ? s.substring(0, s.length() - 1) : s; }
@@ -71,7 +73,11 @@ public class CodeBleachAuth extends JavaPlugin implements Listener {
             String[] x = s.split("\\|");
             if (x[0].equals(ip(p)) && Long.parseLong(x[1]) > System.currentTimeMillis()) { authed.add(p.getUniqueId()); return; }
         }
-        say(p, "/register <password> <password>  or  /login <password>");
+        p.showTitle(Title.title(
+                Component.text("\u2726 ", NamedTextColor.AQUA).append(Component.text("CODE", NamedTextColor.WHITE))
+                        .append(Component.text("/", NamedTextColor.RED)).append(Component.text("BLEACH", NamedTextColor.WHITE)),
+                Component.text("/register <password> <password>  or  /login <password>", NamedTextColor.GRAY),
+                Title.Times.times(Duration.ofMillis(300), Duration.ofMinutes(10), Duration.ofMillis(300))));
         long ticks = getConfig().getLong("login-timeout-seconds", 60) * 20L;
         Bukkit.getScheduler().runTaskLater(this, () -> {
             if (p.isOnline() && locked(p)) p.kick(Component.text("Login timed out."));
@@ -145,7 +151,8 @@ public class CodeBleachAuth extends JavaPlugin implements Listener {
         tries.remove(id);
         long min = getConfig().getLong("session-minutes", 10);
         if (min > 0) sessions.put(p.getName().toLowerCase(), ip(p) + "|" + (System.currentTimeMillis() + min * 60000L));
-        say(p, "Logged in.");
+        p.clearTitle();
+        say(p, "\u2726 Logged in.");
     }
 
     private void wrong(Player p) {

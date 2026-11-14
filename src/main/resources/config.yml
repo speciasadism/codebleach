@@ -1,0 +1,8 @@
+# Your website address, e.g. https://codebleach.netlify.app
+site-url: "https://YOUR-SITE.netlify.app"
+# Must match the MC_KEY environment variable on Netlify
+api-key: "CHANGE_ME"
+login-timeout-seconds: 60
+max-attempts: 5
+# Reconnect from the same IP without logging in again (0 = off)
+session-minutes: 10

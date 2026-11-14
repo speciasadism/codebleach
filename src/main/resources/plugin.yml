@@ -1,0 +1,13 @@
+name: CodeBleachAuth
+version: 1.0.0
+main: com.codebleach.auth.CodeBleachAuth
+api-version: '1.21'
+commands:
+  login:
+    description: Log in
+    usage: /login <password>
+    aliases: [l]
+  register:
+    description: Create your account
+    usage: /register <password> <password>
+    aliases: [reg]

@@ -1,3 +1,4 @@
+![CodeBleachAuth](cover.png)
 # CodeBleachAuth
 In game: /register <password> <password> the first time, then /login <password>.
 Accounts are shared with the CodeBleach website. Only whitelisted usernames can register.
